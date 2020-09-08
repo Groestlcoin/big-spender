@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-const bitcoin = require('bitcoinjs-lib');
+const bitcoin = require('groestlcoinjs-lib');
 const ElectrumCli = require('electrum-client');
 const program = require('commander');
 const maxBy = require('lodash.maxby');
 
 const SAT_IN_BTC = 100000000;
-const MIN_RELAY_TX_FEE_PER_BYTE = 1;  // Bitcoin Core's setting
+const MIN_RELAY_TX_FEE_PER_BYTE = 1;  // Groestlcoin Core's setting
 const electrumSettings = {
   mainnet: {
-    host: 'ec2-54-202-79-18.us-west-2.compute.amazonaws.com',
+    host: 'electrum1.groestlcoin.org',
     port: 50001,
   },
   testnet: {
-    host: 'ec2-34-219-15-143.us-west-2.compute.amazonaws.com',
-    port: 60001,
+    host: 'electrum-test1.groestlcoin.org',
+    port: 51001,
   }
 };
 
@@ -24,7 +24,7 @@ const privateKeyError = 'No private key is set. Did you remember to set environm
 program
   .command('address')
   .alias('a')
-  .description('Generate a random Bitcoin address')
+  .description('Generate a random Groestlcoin address')
   .option('-n, --network [name]', 'Network - testnet (default) or mainnet')
   .option('-p, --printPrivateKey [boolean]', 'Should it print the generated private key')
   .action((options) => {
@@ -38,7 +38,7 @@ program
   .option('-t, --toAddress [address]', 'Recipient address of the transaction')
   .option('-n, --network [name]', 'Network - testnet (default) or mainnet')
   .option('-k, --times [number]', 'Number of transactions where each replaces the previous one (must be >= 2, default: 2)')
-  .option('-a, --amount [number]', 'Amount in BTC to send with each replaced transaction (default: 0.0001)')
+  .option('-a, --amount [number]', 'Amount in GRS to send with each replaced transaction (default: 0.0001)')
   .action(async (options) => {
     if (!privateKey) {
       return console.error(privateKeyError);
@@ -209,4 +209,3 @@ const getNetwork = function (networkName) {
 };
 
 program.parse(process.argv);
-
